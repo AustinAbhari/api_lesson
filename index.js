@@ -59,10 +59,64 @@ app.put('/people', (req, res) => {
     return res.status(200).json({ "message": "people updated!", people })
 })
 
+app.patch('/people', (req, res) => {
+    // name not given 
+    if (!req.query.name) {
+        return res.status(400).json({ "error": "Name is required" });
+    }
 
-// put replaces whole people
-// patch update within 
-// {}, just update name path
+    const person = people.find(c => c.name == req.query.name)
+    // name does not exist in the people
+    if (!person) {
+        return res.status(404).json({ "error": `Name ${req.query.name} was not found` })
+    }
+
+    const index = people.findIndex(c => c.name === req.query.name);
+    people[index] = { ...person, ...req.body }
+
+    return res.status(200).json({ "message": "Person Updated!", people })
+})
+
+app.delete('/people', (req, res) => {
+    // name not given 
+    if (!req.query.name) {
+        return res.status(400).json({ "error": "Name is required" });
+    }
+
+    const person = people.find(c => c.name == req.query.name)
+    // name does not exist in the people
+    if (!person) {
+        return res.status(404).json({ "error": `Name ${req.query.name} was not found` })
+    }
+
+    const index = people.findIndex(c => c.name === req.query.name);
+    people.splice(index, 1);
+
+    return res.status(204)
+})
+
+// 500 everytime
+app.get('/error', (req, res) => {
+    try {
+        throw new Error("Whoops, but this was on purpose")
+    } catch (err) {
+        res.status(500).json({ error: "We did this on purpose I swear", details: err.message })
+    }
+})
+
+
+// limit per min
+// keep count of customer pay limit
+let requestLimit = 3;
+app.get('/limited', (req, res) => {
+    requestLimit--;
+    if (requestLimit == 0) {
+        return res.status(429).json({ error: "too many request" });
+    }
+
+    return res.status(200).json({ message: ":)" })
+})
+
 
 const PORT = 3000;
 app.listen(PORT, () => {
