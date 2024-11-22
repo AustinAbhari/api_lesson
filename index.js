@@ -10,7 +10,7 @@ const app = express();
  */
 app.use(express.json())
 
-let item = [{ name: "AUSTIN" }]
+let item = [{ name: "Austin", age: 31 }]
 
 // Get /item - status 200
 app.get('/item', (req, res) => {
