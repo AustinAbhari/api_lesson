@@ -10,41 +10,59 @@ const app = express();
  */
 app.use(express.json())
 
-let item = [{ name: "Austin", age: 31 }]
+// rules 
+// 1. Make sure name exists
+let people = [{ name: "Austin", age: 31 }, { name: "Sophie", age: 91 }]
 
-// Get /item - status 200
-app.get('/item', (req, res) => {
-    res.status(200).json(item)
+// Get /people - status 200
+app.get('/people', (req, res) => {
+    if (req.query.name) {
+        const person = people.find(c => c.name == req.query.name);
+
+        if (!person) {
+            return res.status(404).json({ "error": `Name ${req.query.name} was not found` })
+        }
+
+        return res.status(200).json(person)
+    }
+    res.status(200).json(people)
 })
 
-// POST /item - 201 Created or 400 requirements not met
-app.post('/item', (req, res) => {
+// POST /people - 201 Created or 400 requirements not met
+app.post('/people', (req, res) => {
     if (!req.body.name) {
         return res.status(400).json({ "error": "Name is required" });
     }
 
-    item.push(req.body);
-    res.status(201).json({ "message": "item created!", item })
+    people.push(req.body);
+    res.status(201).json({ "message": "people created!", people })
 })
 
-// PUT /item - 200 OK or 404 for Not Found
-app.put('/item', (req, res) => {
+// PUT /people - 200 OK or 404 for Not Found
+app.put('/people', (req, res) => {
     // name not given 
-    if (!req.body.name) {
+    if (!req.query.name) {
         return res.status(400).json({ "error": "Name is required" });
     }
 
-    // name does not exist in the item
-    if (!item.find(c => c.name == req.body.name)) {
-        return res.status(404).json({ "error": `Name ${req.body.name} was not found` })
+    // name does not exist in the people
+    if (!people.find(c => c.name == req.query.name)) {
+        return res.status(404).json({ "error": `Name ${req.query.name} was not found` })
     }
 
     // everything is good update the object
-    const index = item.map(c => c.name).indexOf(req.body.name);
-    console.log(index, req.body.name)
-    item[index] = { name: req.body.new };
-    return res.status(200).json({ "message": "item updated!", item })
+    const index = people.map(c => c.name).indexOf(req.query.name);
+    people[index] = req.body;
+
+    // SHOULD check that the data is consistant
+
+    return res.status(200).json({ "message": "people updated!", people })
 })
+
+
+// put replaces whole people
+// patch update within 
+// {}, just update name path
 
 const PORT = 3000;
 app.listen(PORT, () => {
