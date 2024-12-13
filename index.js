@@ -10,6 +10,16 @@ const app = express();
  */
 app.use(express.json())
 
+const API_KEY = "aishkjdbf234j5hb";
+
+const authMiddleware = (req, res, next) => {
+    const apiKey = req.headers['x-api-key'];
+    if (!apiKey || apiKey !== API_KEY) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+    next();
+}
+
 // rules 
 // 1. Make sure name exists
 let people = [{ name: "Austin", age: 31 }, { name: "Sophie", age: 91 }]
@@ -114,6 +124,11 @@ app.get('/limited', (req, res) => {
         return res.status(429).json({ error: "too many request" });
     }
 
+    return res.status(200).json({ message: ":)" })
+})
+
+
+app.get('/protected', authMiddleware, (req, res) => {
     return res.status(200).json({ message: ":)" })
 })
 
