@@ -1,6 +1,14 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 
+const corsOptions = {
+    origin: "http://localhost:3001",
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type', 'x-api-key']
+}
+
+app.use(cors(corsOptions));
 
 /**
  * Adds a middleware function that automatically parses incoming requests 
@@ -37,6 +45,13 @@ app.get('/people', (req, res) => {
     }
     res.status(200).json(people)
 })
+
+/**
+ * get people again /people2
+ * call localhost/3000/people
+ * 
+ */
+
 
 // POST /people - 201 Created or 400 requirements not met
 app.post('/people', (req, res) => {
