@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 
 const app = express();
-const PORT = 4001;
+const PORT = 3002;
 
 // Route to call the API server
 app.get('/fetch-data', async (req, res) => {
