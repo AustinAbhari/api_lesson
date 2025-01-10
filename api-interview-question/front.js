@@ -6,17 +6,17 @@ const PORT = 3002;
 
 // Route to call the API server
 app.get('/fetch-data', async (req, res) => {
-    try {
-        const response = await axios.get('http://localhost:3000/people');
-        res.json({ message: 'Data fetched successfully!', data: response.data });
-    } catch (error) {
-        res.status(500).json({ message: 'Error fetching data from API server.' });
-    }
+  try {
+    const response = await axios.get('http://localhost:3000/people');
+    res.json({ message: 'Data fetched successfully!', data: response.data });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching data from API server.' });
+  }
 });
 
 // Serve a basic HTML page to make browser requests
 app.get('/', (req, res) => {
-    res.send(`
+  res.send(`
     <html>
       <body>
         <h1>Test CORS</h1>
@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
         <script>
           async function fetchData() {
             try {
-              const response = await fetch('http://localhost:3000/people');
+              const response = await fetch('http://localhost:3000/v1/user?user_id=1');
               const data = await response.json();
               console.log(data);
             } catch (error) {
@@ -39,5 +39,5 @@ app.get('/', (req, res) => {
 
 // Start the server
 app.listen(PORT, () => {
-    console.log(`Client server running on http://localhost:${PORT}`);
+  console.log(`Client server running on http://localhost:${PORT}`);
 });
