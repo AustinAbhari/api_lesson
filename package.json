@@ -9,6 +9,7 @@
 		"express": "^4.21.1"
 	},
 	"scripts": {
-		"client-start": "cd client && yarn start"
+		"client-start": "cd client && yarn start",
+		"data-start": "cd data && node index.js"
 	}
 }
