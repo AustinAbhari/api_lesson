@@ -6,7 +6,7 @@ interface Person {
 	age: number;
 }
 
-const PeopleBlock: React.FC = () => {
+const PeopleBlock: React.FC = (): React.ReactElement => {
 	const { people, isLoading, error } = usePeople();
 
 	if (isLoading) {
