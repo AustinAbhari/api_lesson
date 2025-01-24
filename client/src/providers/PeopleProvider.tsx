@@ -9,10 +9,12 @@ const PeopleContext = createContext<{
 	people: Person[];
 	isLoading: boolean;
 	error: string | null;
+	post: (person: Person) => void;
 }>({
 	people: [],
 	isLoading: true,
 	error: null,
+	post: () => {},
 });
 
 export const PeopleProvider = ({ children }: { children: React.ReactNode }) => {
@@ -37,8 +39,28 @@ export const PeopleProvider = ({ children }: { children: React.ReactNode }) => {
 		fetchData();
 	}, []);
 
+	const post = async (person: Person) => {
+		try {
+			setIsLoading(true);
+			const response = await fetch("http://localhost:3001/people", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(person),
+			});
+			const data = await response.json();
+			setPeople(data.people);
+		} catch (e) {
+			setError("Failed to fetch the data");
+			console.error(e);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
 	return (
-		<PeopleContext.Provider value={{ people, isLoading, error }}>
+		<PeopleContext.Provider value={{ people, isLoading, error, post }}>
 			{children}
 		</PeopleContext.Provider>
 	);
