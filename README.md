@@ -17,5 +17,6 @@ This is an example of how to list things you need to use the software and how to
 ### Starting the server
 
   ```sh
-  node index.js
+  yarn client-start
+  yarn data-start
   ```
