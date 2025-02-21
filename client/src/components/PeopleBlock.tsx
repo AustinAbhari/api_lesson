@@ -80,7 +80,7 @@ interface Person {
 }
 
 const PeopleBlock: React.FC = (): React.ReactElement => {
-	const { people, isLoading, error, post } = usePeople();
+	const { people, isLoading, errors, post } = usePeople();
 	const [newPerson, setNewPerson] = useState<Person>({ name: "", age: 0 });
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,10 +96,6 @@ const PeopleBlock: React.FC = (): React.ReactElement => {
 
 	if (isLoading) {
 		return <div>HOLD YOUR HORSES PARTNER</div>;
-	}
-
-	if (error) {
-		return <div> OH NO PARTNER: {error}</div>;
 	}
 
 	return (
@@ -121,6 +117,13 @@ const PeopleBlock: React.FC = (): React.ReactElement => {
 					onChange={handleChange}
 				/>
 				<Button type="submit">ADD PERSON</Button>
+				{errors ? (
+					<div style={{ color: "red" }}>
+						{errors.map((c) => (
+							<p>{c}</p>
+						))}
+					</div>
+				) : null}
 			</Form>
 			<PeopleList>
 				{people.map((person: Person) => (

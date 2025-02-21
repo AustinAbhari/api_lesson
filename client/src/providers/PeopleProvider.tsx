@@ -8,19 +8,19 @@ interface Person {
 const PeopleContext = createContext<{
 	people: Person[];
 	isLoading: boolean;
-	error: string | null;
+	errors: string[] | null;
 	post: (person: Person) => void;
 }>({
 	people: [],
 	isLoading: true,
-	error: null,
+	errors: null,
 	post: () => {},
 });
 
 export const PeopleProvider = ({ children }: { children: React.ReactNode }) => {
 	const [people, setPeople] = useState<Person[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
-	const [error, setError] = useState<string | null>(null);
+	const [errors, setError] = useState<string[] | null>(null);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -29,7 +29,7 @@ export const PeopleProvider = ({ children }: { children: React.ReactNode }) => {
 				const data = await response.json();
 				setPeople(data);
 			} catch (e) {
-				setError("Failed to fetch the data");
+				setError(["Failed to fetch the data"]);
 				console.error(e);
 			} finally {
 				setIsLoading(false);
@@ -50,9 +50,14 @@ export const PeopleProvider = ({ children }: { children: React.ReactNode }) => {
 				body: JSON.stringify(person),
 			});
 			const data = await response.json();
-			setPeople(data.people);
+
+			if (response.ok) {
+				setPeople(data.people);
+			} else {
+				setError(data.errors);
+			}
 		} catch (e) {
-			setError("Failed to fetch the data");
+			setError(["Failed to fetch the data"]);
 			console.error(e);
 		} finally {
 			setIsLoading(false);
@@ -60,7 +65,7 @@ export const PeopleProvider = ({ children }: { children: React.ReactNode }) => {
 	};
 
 	return (
-		<PeopleContext.Provider value={{ people, isLoading, error, post }}>
+		<PeopleContext.Provider value={{ people, isLoading, errors, post }}>
 			{children}
 		</PeopleContext.Provider>
 	);

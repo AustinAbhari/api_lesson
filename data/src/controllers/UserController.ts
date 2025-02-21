@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import User from '../models/User';
 
 let people: User[] = [new User('Austin', 99), new User('Sophie', 11)]; 
@@ -20,17 +20,12 @@ const UserController = {
     createUser: (req: Request, res: Response) => { // Type req and res
         const { age, name } = req.body;
 
-        // Type checking for req.body
-        if (typeof age !== 'number' || typeof name !== 'string') {
-            res.status(400).json({ error: "Invalid request body. 'age' must be a number and 'name' must be a string." });
-        }
-
-
         const newPerson = new User(name, age);
         const errors = newPerson.validate();
 
         if (errors) {
             res.status(400).json({ errors });
+            return;
         }
 
         people.push(newPerson);
