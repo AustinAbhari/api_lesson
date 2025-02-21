@@ -11,7 +11,8 @@ Clone this repo, and go through the prereqs. We are using Node verion < v21.7.0
 This is an example of how to list things you need to use the software and how to install them.
 * yarn installation
   ```sh
-  yarn install
+  cd data && yarn install
+  cd client && yarn install
   ```
 
 ### Starting the server

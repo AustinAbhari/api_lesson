@@ -115,7 +115,7 @@ const PeopleBlock: React.FC = (): React.ReactElement => {
 				/>
 				<Label>Age:</Label>
 				<Input
-					type="text"
+					type="number"
 					name="age"
 					value={newPerson.age}
 					onChange={handleChange}

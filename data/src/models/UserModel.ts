@@ -1,0 +1,1 @@
+let people: User[] = [new User('Austin', 99), new User('Sophie', 11)]; 
